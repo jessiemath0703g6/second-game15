@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessie Math - 角柱與圓柱</title>
+
+    <!-- ✅ 快取連結預覽（請放在 <head> 裡） -->
+    <meta name="description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <!-- ✅ LINE / FB 預覽用 -->
+    <meta property="og:title" content="Jessie Math  - 角柱與圓柱">
+    <meta property="og:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta property="og:type" content="website">
+
+    <!-- ✅ 預覽圖片-->
+    <meta property="og:image" content="g6-u14.png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1536">
+    <meta property="og:image:alt" content="Jessie Math 遊戲封面">
+
+    <!-- ✅ 有些平台會參考 -->
+    <link rel="image_src" href="g6-u14.png">
+
+    <!-- ✅ Twitter / X（可用同一張圖） -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jessie Math  - 角柱與圓柱">
+    <meta name="twitter:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta name="twitter:image" content="g6-u14.png">
+
+    <!-- ✅ footer 會用到 icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --accent-color: #FFD700;
+            --text-dark: #333;
+            --bg-light: #F9F9F9;
+        }
+
+        body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; background-color: var(--bg-light); }
+
+        /* --- Hero 區 --- */
+        .hero-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            gap: 16px;
+        }
+
+        .brand-box { display: flex; align-items: center; min-width: 220px; }
+        .brand-logo {
+            width: 60px; height: 60px;
+            border: 4px solid var(--accent-color);
+            border-radius: 50%;
+            margin-right: 15px;
+            background-image: url('JESSIEMATH-Q.png');
+            background-size: cover;
+            background-color: transparent;
+            flex: 0 0 auto;
+        }
+        .brand-name { font-size: 28px; font-weight: bold; color: #35495e; white-space: nowrap; }
+
+        .nav-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+        .nav-btn {
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .nav-btn:hover { background-color: #f0f0f0; }
+        .nav-btn.active { background-color: #E8F0FE; color: var(--primary-color); border-color: var(--primary-color); }
+
+        /* --- 遊戲主體容器 --- */
+        #game-container { max-width: 900px; margin: 40px auto; padding: 20px; text-align: center; }
+        .page { display: none; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .active-page { display: block; }
+
+        /* --- UI 元件 --- */
+        input[type="text"] { padding: 12px; font-size: 18px; border-radius: 8px; border: 2px solid #ddd; width: 60%; margin-bottom: 20px; }
+        .btn-start { padding: 15px 40px; font-size: 20px; background: #FF9800; color: white; border: none; border-radius: 10px; cursor: pointer; }
+
+        .level-card {
+            padding: 20px; margin: 15px; background: #f8f9fa; border-radius: 15px;
+            cursor: pointer; transition: transform 0.2s; border: 2px solid transparent;
+            text-align: left;
+        }
+        .level-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+
+        /* ✅ 模式按鈕（選關卡新增） */
+        .mode-row{
+            display:flex; gap:10px; flex-wrap:wrap;
+            margin-top: 12px;
+        }
+        .mode-btn{
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,.12);
+            background: rgba(255,255,255,.9);
+            cursor: pointer;
+            font-weight: 800;
+            color:#35495e;
+            transition: .2s;
+            user-select: none;
+        }
+        .mode-btn:hover{
+            transform: translateY(-1px);
+            border-color: rgba(74,144,226,.55);
+            box-shadow: 0 10px 18px rgba(0,0,0,.08);
+        }
+
+        /* --- 遊戲內數據顯示 --- */
+        .game-stats { display: flex; justify-content: space-around; font-size: 24px; font-weight: bold; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
+        .combo-text { color: #e91e63; font-style: italic; font-size: 30px; }
+
+        .option-btn {
+            padding: 15px; margin: 5px; font-size: 18px; background: #fff; border: 2px solid #4A90E2;
+            border-radius: 10px; cursor: pointer; transition: 0.2s;
+        }
+        .option-btn:hover { background: #4A90E2; color: white; }
+
+        .controls { margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .btn-ctrl { padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+
+        /* --- 排行榜表格 --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
+        th { background: #f4f4f4; }
+
+        /* --- 作答回饋條 --- */
+        .feedback-bar{
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: #f6f8ff;
+            border: 1px solid rgba(74,144,226,0.22);
+            display: none;
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        .feedback-bar.show{ display:block; }
+        .feedback-ok{ color:#2e7d32; font-weight: 800; }
+        .feedback-bad{ color:#c62828; font-weight: 800; }
+        .feedback-ans{ margin-top: 6px; color:#35495e; font-weight: 700; }
+        .feedback-tip{ margin-top: 6px; color:#607d8b; font-size: 15px; }
+        .disabled{ opacity: .55; pointer-events: none; }
+
+        /* ✅ 題目附圖（SVG / 小圖卡） */
+        .q-media{
+            margin: 14px auto 6px;
+            max-width: 520px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+            background: #fff;
+            text-align: left;
+        }
+        .q-media .cap{
+            padding: 10px 12px;
+            font-size: 14px;
+            color:#607d8b;
+            background: #fafcff;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+        .q-media svg{
+            width:100%;
+            height:auto;
+            display:block;
+            background: linear-gradient(180deg, rgba(248,250,252,.95), rgba(255,255,255,.96));
+        }
+
+        /* ✅ Footer（你指定的 footer-pill，不改內容） */
+        footer{
+            margin-top: 34px;
+            padding: 0 16px 22px;
+        }
+        .footer-pill{
+            max-width: 980px;
+            margin: 0 auto;
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+        }
+        .footer-left, .footer-right{
+            display:flex;
+            align-items:center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .footer-dot{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 0 6px rgba(255,215,0,0.18);
+        }
+        .footer-copy{
+            color:#35495e;
+            font-weight: 800;
+            font-size: 14px;
+        }
+        .footer-icon{
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: rgba(74,144,226,0.10);
+            border: 1px solid rgba(74,144,226,0.20);
+            color:#35495e;
+        }
+        .footer-tagline{
+            color:#607d8b;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: .2px;
+        }
+
+        /* =========================
+           ✅ RWD：手機 / 平板 / 電腦
+           ========================= */
+        @media (max-width: 980px){
+            #game-container{ max-width: 920px; padding: 16px; margin: 26px auto; }
+            .page{ padding: 26px; }
+        }
+        @media (max-width: 820px){
+            .hero-nav{
+                padding: 12px 16px;
+                flex-wrap: wrap;
+            }
+            .brand-box{ min-width: 0; }
+            .brand-logo{ width: 54px; height: 54px; margin-right: 12px; }
+            .brand-name{ font-size: 24px; }
+            input[type="text"]{ width: 100%; }
+
+            /* 選關卡三欄 => 兩欄 */
+            #page-2 .level-grid{
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
+        @media (max-width: 520px){
+            .brand-name{ font-size: 22px; }
+            .nav-btn{ padding: 9px 14px; border-radius: 999px; }
+            .page{ padding: 18px; border-radius: 16px; }
+            .game-stats{ font-size: 18px; }
+            .combo-text{ font-size: 22px; }
+            /* 選項兩欄 => 一欄 */
+            #options-container{ grid-template-columns: 1fr !important; }
+            /* 選關卡兩欄 => 一欄 */
+            #page-2 .level-grid{
+                grid-template-columns: 1fr !important;
+            }
+            .level-card{ margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="hero-nav">
+        <div class="brand-box">
+            <div class="brand-logo"></div>
+            <div class="brand-name">Jessie Math</div>
+        </div>
+        <div class="nav-buttons">
+            <a href="https://jessiemath0703-chu.github.io/website2/" class="nav-btn">🏠 首頁</a>
+            <a href="https://jessiemath0703-chu.github.io/Game-Lobby/" class="nav-btn">🎮 遊戲大廳</a>
+            <a href="https://jessiemath0703-chu.github.io/Game-Lobby/#g6-u15" class="nav-btn active">🔙 六年級角柱與圓柱</a>
+        </div>
+    </nav>
+
+    <div id="game-container">
+
+        <div id="page-1" class="page active-page">
+            <h2>🏠 歡迎來到空間幾何挑戰！</h2>
+            <p>請輸入您的名字以開始冒險：</p>
+            <input type="text" id="player-name" placeholder="小天才的名字...">
+            <div style="text-align: left; background: #fffde7; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4>📜 遊戲規則：</h4>
+                <ul>
+                    <li>⏳ <b>答對：</b> 時間增加 5 秒。</li>
+                    <li>⚠️ <b>答錯：</b> 時間扣除 5 秒。</li>
+                    <li>🔥 <b>Combo 連擊：</b> 連續答對將獲得分數加倍率！</li>
+                    <li>🏆 <b>排行榜：</b> 挑戰前十名獲取榮譽徽章。</li>
+                </ul>
+            </div>
+            <button class="btn-start" onclick="goToPage(2)">進入冒險</button>
+        </div>
+
+        <div id="page-2" class="page">
+            <h2 id="welcome-msg">選擇關卡</h2>
+
+            <div class="level-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                <div class="level-card">
+                    <h3>第一關</h3>
+                    <p>角柱與圓柱的體積</p>
+                    <span>⭐ 難度：簡單</span>
+                    <div class="mode-row">
+                        <button class="mode-btn basic" onclick="startGame(1,'basic')">基礎（倒數 120 秒）</button>
+                        <button class="mode-btn adv" onclick="startGame(1,'adv')">進階（倒數 90 秒）</button>
+                        <button class="mode-btn boss" onclick="startGame(1,'boss')">魔王（倒數 60 秒）</button>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <h3>第二關</h3>
+                    <p>角柱與圓柱的應用</p>
+                    <span>⭐⭐ 難度：中等</span>
+                    <div class="mode-row">
+                        <button class="mode-btn basic" onclick="startGame(2,'basic')">基礎（倒數 120 秒）</button>
+                        <button class="mode-btn adv" onclick="startGame(2,'adv')">進階（倒數 90 秒）</button>
+                        <button class="mode-btn boss" onclick="startGame(2,'boss')">魔王（倒數 60 秒）</button>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <h3>第三關</h3>
+                    <p>角柱與圓柱的表面積</p>
+                    <span>⭐⭐⭐ 難度：挑戰</span>
+                    <div class="mode-row">
+                        <button class="mode-btn basic" onclick="startGame(3,'basic')">基礎（倒數 120 秒）</button>
+                        <button class="mode-btn adv" onclick="startGame(3,'adv')">進階（倒數 90 秒）</button>
+                        <button class="mode-btn boss" onclick="startGame(3,'boss')">魔王（倒數 60 秒）</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            <h3>🥇 榮譽排行榜 (Top 10)</h3>
+            <table id="leaderboard-table">
+                <thead>
+                    <!-- ✅ 改為：玩家名 / 關卡 / 模式 / 分數 -->
+                    <tr><th>排名</th><th>玩家</th><th>關卡</th><th>模式</th><th>得分</th></tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="page-3" class="page">
+            <div class="game-stats">
+                <div>時間: <span id="timer">60</span>s</div>
+                <div>分數: <span id="score">0</span></div>
+                <div class="combo-text">Combo: <span id="combo">0</span> x</div>
+            </div>
+
+            <div id="question-box" style="min-height: 250px; background: #fff; padding: 20px; border-radius: 15px; border: 2px solid #eee;">
+                <h3 id="q-text">題目載入中...</h3>
+
+                <div id="q-media" class="q-media" style="display:none;"></div>
+
+                <div id="options-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                </div>
+
+                <div id="feedback" class="feedback-bar" aria-live="polite"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-ctrl" style="background:#607d8b; color:white;" onclick="togglePause()">⏸️ 暫停/繼續</button>
+                <button class="btn-ctrl" style="background:#f44336; color:white;" onclick="resetGame()">🔄 重新開始</button>
+                <button class="btn-ctrl" style="background:#9c27b0; color:white;" onclick="exitGame()">🏰 回主選單</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-pill">
+            <div class="footer-left">
+                <div class="footer-dot" aria-hidden="true"></div>
+                <div class="footer-copy">© 2025–2026 Jessie Math 捷析老師. All rights reserved.</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-icon" aria-hidden="true"><i class="fas fa-compass"></i></div>
+                <div class="footer-tagline">數學不迷路，Jessie 帶你走向理解。</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 變數定義 ---
+        let playerName = "";
+        let score = 0;
+        let timer = 60;
+        let combo = 0;
+        let gameActive = false;
+        let timerInterval;
+        let currentLevel = 1;
+        let currentAnswer = "";
+        let currentQuestionObj = null;
+
+        // ✅ 模式（新增）
+        let currentMode = "boss"; // basic / adv / boss
+        const MODE_TIME = { basic: 120, adv: 90, boss: 60 };
+
+        // ✅ 題目抽取用：每輪先洗牌、抽完再洗牌（不重複直到抽完）
+        const levelDecks = { 1: [], 2: [], 3: [] };
+        const levelDeckIndex = { 1: 0, 2: 0, 3: 0 };
+
+        // ✅ 常數
+        const PI = 3.14;
+
+        function randInt(min, max){
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function mcqNumber(correct, candidates){
+            const set = new Set();
+            set.add(String(correct));
+            candidates.forEach(x => set.add(String(x)));
+            const options = [...set].slice(0, 4);
+            while(options.length < 4){
+                const bump = randInt(-80, 120);
+                options.push(String(Math.max(0, Number(correct) + bump)));
+            }
+            return shuffleArray(options.slice(0,4));
+        }
+
+        function mcqText(correct, distractors){
+            const set = new Set([correct, ...distractors]);
+            const options = [...set].slice(0,4);
+            while(options.length < 4) options.push(distractors[randInt(0, distractors.length-1)]);
+            return shuffleArray(options.slice(0,4));
+        }
+
+        function svgCylinder(labelTop, labelSide, labelH){
+            return `
+            <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="cylinder">
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="rgba(74,144,226,0.18)"/>
+                  <stop offset="1" stop-color="rgba(74,144,226,0.06)"/>
+                </linearGradient>
+              </defs>
+              <rect x="18" y="18" width="484" height="204" rx="18" fill="rgba(255,255,255,.75)" stroke="rgba(0,0,0,.08)"/>
+              <g transform="translate(110,40)">
+                <ellipse cx="150" cy="42" rx="92" ry="28" fill="url(#g)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+                <rect x="58" y="42" width="184" height="116" fill="url(#g)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+                <ellipse cx="150" cy="158" rx="92" ry="28" fill="rgba(74,144,226,0.10)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+
+                <text x="150" y="36" text-anchor="middle" font-size="18" fill="rgba(53,73,94,.9)" font-weight="700">${labelTop}</text>
+                <text x="256" y="110" text-anchor="start" font-size="18" fill="rgba(53,73,94,.9)" font-weight="700">${labelSide}</text>
+
+                <line x1="42" y1="42" x2="42" y2="158" stroke="rgba(0,0,0,.35)" stroke-width="2"/>
+                <text x="24" y="104" text-anchor="middle" font-size="18" fill="rgba(53,73,94,.9)" font-weight="700">${labelH}</text>
+              </g>
+            </svg>`;
+        }
+
+        function svgPrism(labelBase, labelH){
+            return `
+            <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="prism">
+              <defs>
+                <linearGradient id="p" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="rgba(255,215,0,0.22)"/>
+                  <stop offset="1" stop-color="rgba(74,144,226,0.10)"/>
+                </linearGradient>
+              </defs>
+              <rect x="18" y="18" width="484" height="204" rx="18" fill="rgba(255,255,255,.75)" stroke="rgba(0,0,0,.08)"/>
+              <g transform="translate(110,40)">
+                <polygon points="60,60 190,30 320,60 190,90" fill="rgba(74,144,226,0.10)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+                <polygon points="60,60 60,160 190,190 190,90" fill="url(#p)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+                <polygon points="190,90 190,190 320,160 320,60" fill="rgba(255,215,0,0.10)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+                <polygon points="60,160 190,190 320,160 190,130" fill="rgba(74,144,226,0.08)" stroke="rgba(53,73,94,.55)" stroke-width="2"/>
+
+                <text x="190" y="24" text-anchor="middle" font-size="18" fill="rgba(53,73,94,.9)" font-weight="800">${labelBase}</text>
+                <line x1="44" y1="66" x2="44" y2="162" stroke="rgba(0,0,0,.35)" stroke-width="2"/>
+                <text x="26" y="118" text-anchor="middle" font-size="18" fill="rgba(53,73,94,.9)" font-weight="800">${labelH}</text>
+              </g>
+            </svg>`;
+        }
+
+        function renderQuestionMedia(qData){
+            const box = document.getElementById('q-media');
+            if(qData && qData.svg){
+                const cap = qData.cap ? `<div class="cap">${qData.cap}</div>` : `<div class="cap">看圖解題：把圖上的標示用在公式裡 ✨</div>`;
+                box.innerHTML = qData.svg + cap;
+                box.style.display = "block";
+            }else{
+                box.innerHTML = "";
+                box.style.display = "none";
+            }
+        }
+
+        const baseQuestions = { /*（保持你原本內容，不改不動）*/
+            1: [
+                { q: "底面積 50 平方公分，高 10 公分的角柱，體積是多少立方公分？", options: ["500", "50", "150", "250"], a: "500" },
+                { q: "半徑 5 公分，高 10 公分的圓柱，體積約為多少立方公分？(π=3.14)", options: ["785", "1570", "314", "157"], a: "785" },
+                { q: "底面為 8×8 正方形，高為 14 公分的四角柱，體積為何？", options: ["896", "448", "112", "64"], a: "896" },
+                { q: "底面積 48 平方公分，柱高 25 公分的角柱，體積是多少立方公分？", options: ["1200", "960", "2400", "1920"], a: "1200" },
+                { q: "圓柱底面半徑 3 公分，高 15 公分，體積約多少立方公分？(π=3.14)", options: ["424", "283", "141", "565"], a: "424" },
+                { q: "圓柱底面直徑 10 公分，高 16 公分，體積約多少立方公分？(π=3.14)", options: ["1256", "502.4", "1570", "628"], a: "1256" },
+                (function(){
+                    const d = randInt(8, 16);
+                    const h = randInt(10, 22);
+                    const r = d/2;
+                    const v = Math.round((PI * r * r * h) * 10) / 10;
+                    const opts = mcqNumber(v, [Math.round(v*0.8), Math.round(v*1.2), Math.round(v/2)]);
+                    return {
+                        q: `看圖：圓柱的直徑為 ${d} 公分，高為 ${h} 公分。體積約多少立方公分？(π=3.14)`,
+                        options: opts,
+                        a: String(v),
+                        svg: svgCylinder(`直徑 ${d}`, "圓柱", `高 ${h}`),
+                        cap: "提示：先把直徑變半徑，再算 πr²h。"
+                    };
+                })(),
+                (function(){
+                    const baseA = randInt(36, 90);
+                    const h = randInt(8, 18);
+                    const v = baseA * h;
+                    const opts = mcqNumber(v, [v+baseA, v-h, v+2*h]);
+                    return {
+                        q: `看圖：角柱的底面積為 ${baseA} 平方公分，柱高為 ${h} 公分。體積是多少立方公分？`,
+                        options: opts,
+                        a: String(v),
+                        svg: svgPrism(`底面積 ${baseA}`, `高 ${h}`),
+                        cap: "提示：體積＝底面積×柱高。"
+                    };
+                })(),
+                { q: "兩個角柱底面積相同，甲柱高 10 公分，乙柱高 15 公分。乙的體積是甲的幾倍？", options: ["1.5 倍", "1.2 倍", "2 倍", "0.5 倍"], a: "1.5 倍" },
+                { q: "兩個柱體柱高相同，甲底面積 52，乙底面積 48（平方公分）。哪一個體積較大？", options: ["甲", "乙", "一樣大", "無法判斷"], a: "甲" }
+            ],
+            2: [
+                { q: "大罐頭直徑 20 公分，高 18 公分，體積約是多少立方公分？(π=3.14)", options: ["5652", "1130.4", "2260.8", "2826"], a: "5652" },
+                { q: "要貼一圈包裝紙在直徑 10、高 20 的罐頭側面，側面積約多少平方公分？(π=3.14)", options: ["628", "314", "1570", "1256"], a: "628" },
+                { q: "空心柱體外直徑 10、內直徑 6、高 15，材料體積約多少立方公分？(π=3.14)", options: ["753.6", "1177.5", "376.8", "1507.2"], a: "753.6" },
+                (function(){
+                    const d = randInt(8, 18);
+                    const h = randInt(10, 26);
+                    const area = Math.round((PI * d * h) * 10) / 10;
+                    const opts = mcqNumber(area, [Math.round(area*0.9), Math.round(area*1.1), Math.round(area/2)]);
+                    return {
+                        q: `看圖：圓柱的直徑為 ${d} 公分，高為 ${h} 公分。側面積約多少平方公分？(π=3.14)`,
+                        options: opts,
+                        a: String(area),
+                        svg: svgCylinder(`直徑 ${d}`, "側面包裝紙", `高 ${h}`),
+                        cap: "提示：側面積＝圓周×高＝(πd)×h。"
+                    };
+                })(),
+                { q: "一個角柱底面周長 30 公分，高 10 公分。若要包『側面』一圈，側面積是多少平方公分？", options: ["300", "600", "150", "400"], a: "300" },
+                { q: "兩個圓柱柱高相同：甲半徑 4，乙半徑 6（公分）。乙的體積是甲的幾倍？", options: ["2.25 倍", "1.5 倍", "3 倍", "4 倍"], a: "2.25 倍" }
+            ],
+            3: [
+                { q: "邊長 10 公分的正方體，表面積是多少平方公分？", options: ["600", "100", "1000", "400"], a: "600" },
+                { q: "底面周長 30、公高 10、底面積 50 的角柱，表面積為何？", options: ["400", "350", "130", "500"], a: "400" },
+                { q: "圓柱半徑 10、高 20，表面積大約是多少平方公分？(π=3.14)", options: ["1884", "1256", "628", "1570"], a: "1884" },
+                { q: "圓柱直徑 10、公高 20，側面積約多少平方公分？(π=3.14)", options: ["628", "314", "1570", "1256"], a: "628" },
+                (function(){
+                    const d = randInt(8, 18);
+                    const h = randInt(10, 22);
+                    const r = d/2;
+                    const sa = Math.round((2*PI*r*(r+h)) * 10) / 10;
+                    const opts = mcqNumber(sa, [Math.round(sa*0.85), Math.round(sa*1.15), Math.round(sa-PI*r*r)]);
+                    return {
+                        q: `看圖：圓柱直徑 ${d} 公分，高 ${h} 公分。表面積約多少平方公分？(π=3.14)`,
+                        options: opts,
+                        a: String(sa),
+                        svg: svgCylinder(`直徑 ${d}`, "表面積", `高 ${h}`),
+                        cap: "提示：表面積＝側面積＋兩個底面積。"
+                    };
+                })(),
+                { q: "角柱底面周長 52 公分，高 25 公分，側面積是多少平方公分？", options: ["1300", "1040", "2600", "650"], a: "1300" },
+                { q: "一個角柱側面積 300，底面積 80（平方公分）。表面積是多少平方公分？", options: ["460", "380", "540", "700"], a: "460" }
+            ]
+        };
+
+        function generateQuestions(level){
+            const qs = [];
+
+            if(level === 1){
+                for(let i=0;i<6;i++){
+                    const useD = Math.random() < 0.5;
+                    const r = randInt(2, 8);
+                    const d = r*2;
+                    const h = randInt(8, 24);
+                    const v = Math.round((PI * r * r * h) * 10) / 10;
+                    const opts = mcqNumber(v, [Math.round(v*0.75), Math.round(v*1.25), Math.round(v + PI*r*r)]);
+                    const useSvg = Math.random() < 0.7;
+                    qs.push({
+                        q: useD
+                            ? `圓柱底面直徑 ${d} 公分，高 ${h} 公分，體積約多少立方公分？(π=3.14)`
+                            : `圓柱底面半徑 ${r} 公分，高 ${h} 公分，體積約多少立方公分？(π=3.14)`,
+                        options: opts,
+                        a: String(v),
+                        ...(useSvg ? {
+                            svg: svgCylinder(useD ? `直徑 ${d}` : `半徑 ${r}`, "體積", `高 ${h}`),
+                            cap: "提示：體積＝πr²h。"
+                        } : {})
+                    });
+                }
+
+                for(let i=0;i<5;i++){
+                    const baseA = randInt(24, 120);
+                    const h = randInt(6, 20);
+                    const v = baseA * h;
+                    const opts = mcqNumber(v, [v+baseA, v-baseA, v+h*10]);
+                    const useSvg = Math.random() < 0.7;
+                    qs.push({
+                        q: `角柱底面積 ${baseA} 平方公分，柱高 ${h} 公分，體積是多少立方公分？`,
+                        options: opts,
+                        a: String(v),
+                        ...(useSvg ? {
+                            svg: svgPrism(`底面積 ${baseA}`, `高 ${h}`),
+                            cap: "提示：體積＝底面積×柱高。"
+                        } : {})
+                    });
+                }
+
+                for(let i=0;i<3;i++){
+                    const baseA = randInt(30, 90);
+                    const h = randInt(8, 18);
+                    const v = baseA * h;
+                    const opts = mcqNumber(h, [h+2, h-2, h+5].map(x=>Math.max(1,x)));
+                    qs.push({
+                        q: `一個角柱體積 ${v} 立方公分，底面積 ${baseA} 平方公分，柱高是多少公分？`,
+                        options: opts,
+                        a: String(h)
+                    });
+                }
+            }
+
+            if(level === 2){
+                for(let i=0;i<6;i++){
+                    const d = randInt(8, 20);
+                    const h = randInt(10, 26);
+                    const area = Math.round((PI * d * h) * 10) / 10;
+                    const opts = mcqNumber(area, [Math.round(area*0.9), Math.round(area*1.1), Math.round(area/2)]);
+                    const useSvg = Math.random() < 0.7;
+                    qs.push({
+                        q: `罐頭直徑 ${d} 公分，高 ${h} 公分。貼側面包裝紙需要的面積約多少平方公分？(π=3.14)`,
+                        options: opts,
+                        a: String(area),
+                        ...(useSvg ? {
+                            svg: svgCylinder(`直徑 ${d}`, "側面積", `高 ${h}`),
+                            cap: "提示：側面積＝(πd)×h。"
+                        } : {})
+                    });
+                }
+
+                for(let i=0;i<3;i++){
+                    const r1 = randInt(2, 6);
+                    const r2 = randInt(r1+1, 8);
+                    const ratio = (r2*r2)/(r1*r1);
+                    const ratioText = (Math.round(ratio*100)/100).toString().replace(/\.0+$/,'');
+                    qs.push({
+                        q: `兩個圓柱柱高相同：甲半徑 ${r1} 公分、乙半徑 ${r2} 公分。乙的體積是甲的幾倍？`,
+                        options: mcqText(`${ratioText} 倍`, ["1.5 倍", "2 倍", "3 倍", "4 倍", "2.25 倍"]),
+                        a: `${ratioText} 倍`
+                    });
+                }
+
+                for(let i=0;i<4;i++){
+                    const per = randInt(24, 60);
+                    const h = randInt(8, 22);
+                    const area = per*h;
+                    const opts = mcqNumber(area, [area+per, area+h*10, area-per]);
+                    qs.push({
+                        q: `角柱底面周長 ${per} 公分，高 ${h} 公分。側面積是多少平方公分？`,
+                        options: opts,
+                        a: String(area)
+                    });
+                }
+            }
+
+            if(level === 3){
+                for(let i=0;i<6;i++){
+                    const r = randInt(2, 8);
+                    const h = randInt(8, 24);
+                    const sa = Math.round((2*PI*r*(r+h))*10)/10;
+                    const opts = mcqNumber(sa, [Math.round(sa*0.85), Math.round(sa*1.15), Math.round(sa-PI*r*r)]);
+                    const useSvg = Math.random() < 0.7;
+                    qs.push({
+                        q: `圓柱半徑 ${r} 公分，高 ${h} 公分。表面積約多少平方公分？(π=3.14)`,
+                        options: opts,
+                        a: String(sa),
+                        ...(useSvg ? {
+                            svg: svgCylinder(`半徑 ${r}`, "表面積", `高 ${h}`),
+                            cap: "提示：表面積＝2πr(r+h)。"
+                        } : {})
+                    });
+                }
+
+                for(let i=0;i<6;i++){
+                    const per = randInt(24, 60);
+                    const h = randInt(8, 22);
+                    const baseA = randInt(30, 120);
+                    const lateral = per*h;
+                    const sa = lateral + 2*baseA;
+                    const opts = mcqNumber(sa, [sa+baseA, sa-lateral, sa+per]);
+                    qs.push({
+                        q: `角柱底面周長 ${per} 公分，高 ${h} 公分，底面積 ${baseA} 平方公分。表面積是多少平方公分？`,
+                        options: opts,
+                        a: String(sa)
+                    });
+                }
+            }
+
+            return qs;
+        }
+
+        function buildLevelQuestions(level){
+            const fixed = baseQuestions[level] ? [...baseQuestions[level]] : [];
+            const gen = generateQuestions(level);
+            return fixed.concat(gen);
+        }
+
+        function resetDeck(level) {
+            levelDecks[level] = shuffleArray(buildLevelQuestions(level));
+            levelDeckIndex[level] = 0;
+        }
+
+        function drawQuestion(level) {
+            if (!levelDecks[level] || levelDecks[level].length === 0) resetDeck(level);
+            if (levelDeckIndex[level] >= levelDecks[level].length) {
+                resetDeck(level);
+            }
+            const q = levelDecks[level][levelDeckIndex[level]];
+            levelDeckIndex[level] += 1;
+            return q;
+        }
+
+        function goToPage(pageNumber) {
+            if (pageNumber === 2) {
+                const nameInput = document.getElementById('player-name').value;
+                if (!nameInput) { alert("請輸入名字以記錄成績！"); return; }
+                playerName = nameInput;
+                document.getElementById('welcome-msg').innerText = `你好，${playerName}！`;
+                renderLeaderboard();
+            }
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(`page-${pageNumber}`).classList.add('active-page');
+        }
+
+        function startGame(level, mode) {
+            currentLevel = level;
+            currentMode = mode || "boss";
+            score = 0;
+            timer = MODE_TIME[currentMode] ?? 60;
+            combo = 0;
+            gameActive = true;
+
+            resetDeck(currentLevel);
+
+            goToPage(3);
+            updateStats();
+            nextQuestion();
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (gameActive) {
+                    timer--;
+                    updateStats();
+                    if (timer <= 0) endGame();
+                }
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            hideFeedback();
+
+            const qData = drawQuestion(currentLevel);
+            currentQuestionObj = qData;
+
+            document.getElementById('q-text').innerText = qData.q;
+            currentAnswer = qData.a;
+
+            renderQuestionMedia(qData);
+
+            const shuffledOptions = shuffleArray([...qData.options]);
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = "";
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt);
+                container.appendChild(btn);
+            });
+        }
+
+        function setOptionsDisabled(disabled) {
+            const container = document.getElementById('options-container');
+            [...container.querySelectorAll('button')].forEach(b => {
+                if (disabled) b.classList.add('disabled');
+                else b.classList.remove('disabled');
+                b.disabled = disabled;
+            });
+        }
+
+        function showFeedback(isCorrect, correctAnswer) {
+            const fb = document.getElementById('feedback');
+            const msg = isCorrect
+                ? `<div class="feedback-ok">✅ 答對了！時間 +5 秒，Combo +1</div>`
+                : `<div class="feedback-bad">❌ 答錯了！時間 -5 秒，Combo 歸零</div>
+                   <div class="feedback-ans">正確答案：${correctAnswer}</div>`;
+            fb.innerHTML = msg + `<div class="feedback-tip">下一題即將傳送…🚀</div>`;
+            fb.classList.add('show');
+        }
+
+        function hideFeedback() {
+            const fb = document.getElementById('feedback');
+            fb.classList.remove('show');
+            fb.innerHTML = "";
+        }
+
+        function checkAnswer(selected) {
+            if (!gameActive) return;
+
+            setOptionsDisabled(true);
+
+            if (selected === currentAnswer) {
+                combo++;
+                timer += 5;
+                score += (100 * (combo > 1 ? (1 + combo * 0.1) : 1));
+                showFeedback(true, currentAnswer);
+            } else {
+                combo = 0;
+                timer -= 5;
+                showFeedback(false, currentAnswer);
+            }
+
+            updateStats();
+
+            setTimeout(() => {
+                if (!gameActive) return;
+                setOptionsDisabled(false);
+                nextQuestion();
+            }, 900);
+        }
+
+        function updateStats() {
+            document.getElementById('score').innerText = Math.floor(score);
+            document.getElementById('timer').innerText = timer;
+            document.getElementById('combo').innerText = combo;
+        }
+
+        function togglePause() { gameActive = !gameActive; }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            alert(`遊戲結束！您的最終分數是：${Math.floor(score)}`);
+
+            // ✅ 存檔：加入 level + mode
+            saveScore(playerName, Math.floor(score), currentLevel, currentMode);
+
+            goToPage(2);
+        }
+
+        function exitGame() {
+            if(confirm("要離開目前的遊戲嗎？分數將不被記錄。")) {
+                clearInterval(timerInterval);
+                goToPage(2);
+            }
+        }
+
+        function resetGame() {
+            if(confirm("確定要重新開始嗎？")) startGame(currentLevel, currentMode);
+        }
+
+        // --- 排行榜邏輯 (localStorage) ---
+        // ✅ 變更：saveScore 多存 level + mode
+        function saveScore(name, finalScore, level, mode) {
+            let history = JSON.parse(localStorage.getItem('jessieMath_scores')) || [];
+            history.push({
+                name: name,
+                score: finalScore,
+                level: level || 1,
+                mode: mode || "boss",
+                date: new Date().toLocaleDateString()
+            });
+
+            history.sort((a, b) => b.score - a.score);
+            history = history.slice(0, 10);
+            localStorage.setItem('jessieMath_scores', JSON.stringify(history));
+            renderLeaderboard();
+        }
+
+        // ✅ 顯示：玩家 / 關卡 / 模式 / 分數（並兼容舊資料）
+        function renderLeaderboard() {
+            const history = JSON.parse(localStorage.getItem('jessieMath_scores')) || [];
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = "";
+
+            if (history.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5'>目前尚無紀錄，快來挑戰吧！</td></tr>";
+                return;
+            }
+
+            const modeLabel = (m) => (m === "basic" ? "基礎" : (m === "adv" ? "進階" : "魔王"));
+            const levelLabel = (lv) => `第${lv}關`;
+
+            history.forEach((record, index) => {
+                let medal = index === 0 ? "🥇" : (index === 1 ? "🥈" : (index === 2 ? "🥉" : index + 1));
+                const mode = modeLabel(record.mode || "boss");
+                const level = levelLabel(record.level || 1);
+                tbody.innerHTML += `<tr><td>${medal}</td><td>${record.name}</td><td>${level}</td><td>${mode}</td><td>${record.score}</td></tr>`;
+            });
+        }
+    </script>
+</body>
+</html>
